@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">NetCMD</string>
+    <string name="text">192.168.43.148/gpio/1</string>
+    <string name="hint">Enter your url</string>
+    <string name="bt_txt_enter">Enter</string>
+    <string name="scheme">http://</string>
+    <string name="response">Response: </string>
+</resources>
