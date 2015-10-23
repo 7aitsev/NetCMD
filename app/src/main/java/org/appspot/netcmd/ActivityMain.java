@@ -28,15 +28,14 @@ public class ActivityMain extends Activity {
   private Context mContext;
 
   private boolean mBtn_state = true;
-  private String BTN_STATE_INFO = "btn",
-                 EDITURL_STATE_INFO = "editUrl";
+  private final String BTN_STATE_INFO = "btn";
 
-  class RestRequest extends AsyncTask<String, Void, String> {
+  private class RestRequest extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
-      StringBuilder builder = new StringBuilder();;
+      StringBuilder builder = new StringBuilder();
       try {
-        log("Making an GET request.");
+        log("Making a GET request");
         URL url = new URL(params[0]);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Content-Type", "text/html");
@@ -51,7 +50,7 @@ public class ActivityMain extends Activity {
         connection.disconnect();
       } catch(Exception e) {
         builder.append(e.getMessage());
-        log("There was an exception: " + e.getMessage());
+        log("Error: " + e.getMessage());
       }
       return builder.toString();
     }
@@ -59,7 +58,7 @@ public class ActivityMain extends Activity {
     @Override
     protected void onPostExecute(String s) {
       super.onPostExecute(s);
-      log("Execution result (an response): " + s);
+      log("Response: " + s);
       mBtn_state = true;
       mBtn_enter.setEnabled(mBtn_state);
       Toast.makeText(mContext, mContext.getString(R.string.response) + s, Toast.LENGTH_LONG).show();
@@ -70,7 +69,7 @@ public class ActivityMain extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    log("Activity created.");
+    log("Activity created");
 
     mContext = this.getApplicationContext();
     mEditUrl = (EditText) findViewById(R.id.url);
@@ -101,7 +100,7 @@ public class ActivityMain extends Activity {
     mBtn_enter.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        log("Button pressed.");
+        log("Button pressed");
         performRequest(makeUrl());
       }
     });
@@ -115,11 +114,11 @@ public class ActivityMain extends Activity {
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    log("Invoked onSaveInstanceState.");
+    log("Invoked onSaveInstanceState");
     outState.putBoolean(BTN_STATE_INFO, mBtn_state);
   }
 
-  String makeUrl() {
+  private String makeUrl() {
     String url = mEditUrl.getText().toString();
     Uri uri = Uri.parse(url);
     if(uri.getScheme() == null)
@@ -128,18 +127,18 @@ public class ActivityMain extends Activity {
     return url;
   }
 
-  void performRequest(String url) {
+  private void performRequest(String url) {
     mBtn_state = false;
     mBtn_enter.setEnabled(mBtn_state);
     if(! mBtn_state) {
-      log("Starting new AsyncTask");
+      log("Starting new request");
       RestRequest request = new RestRequest();
       request.execute(url);
     }
   }
 
-  void log(String text) {
-    final String TAG = "___ActivityMain";
+  private void log(String text) {
+    final String TAG = "ActivityMain";
     Log.d(TAG, text);
   }
 }
